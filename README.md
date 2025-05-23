@@ -1,5 +1,5 @@
 
-# How to Run the Hospital Management App
+# How to Run the Patient Management App-Streamlit app
 
 ### What you need first
 
