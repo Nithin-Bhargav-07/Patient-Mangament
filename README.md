@@ -75,7 +75,7 @@ export FERNET_KEY="paste-your-key-here"
 Run:
 
 ```bash
-streamlit run app.py
+streamlit run home.py
 ```
 
 ---
@@ -93,10 +93,6 @@ Go to the link Streamlit shows (usually http://localhost:8501).
 - Schedule appointments
 - See patient and room stats with graphs on the dashboard
 
----
 
-If you want to deploy this app somewhere online (like Hugging Face Spaces), remember to set the encryption key there too.
 
----
 
-Let me know if you want me to help with anything else!
