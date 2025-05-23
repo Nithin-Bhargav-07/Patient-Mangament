@@ -1,0 +1,6 @@
+streamlit
+cryptography
+matplotlib
+pandas
+PyPDF2
+Pillow
