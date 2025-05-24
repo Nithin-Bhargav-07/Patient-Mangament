@@ -7,11 +7,12 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 from utils import set_background
 from encryption import decrypt_data
+from collections import Counter
+from datetime import datetime, timedelta
 
 st.set_page_config(page_title="Hospital Dashboard", layout="wide")
 
 set_background("images/background.jpg")  
-
 
 
 role_required(['admin', 'doctor'])
@@ -24,7 +25,7 @@ else:
     st.title(f"Welcome, Dr. {username.capitalize()}!")
 st.markdown("###  Here's your hospital overview for today.")
 
-# Load data
+
 def load_json_lines(file_path):
     if not os.path.exists(file_path):
         return []
@@ -66,11 +67,61 @@ st.pyplot(fig)
 st.markdown("---")
 
 
-st.subheader("⚡ Quick Actions")
+st.subheader(" Health Trends (Last 7 Days)")
+date_counts = Counter(decrypt_data(appt["date"]) for appt in appointments if "date" in appt)
+dates = [(datetime.today() - timedelta(days=i)).strftime("%Y-%m-%d") for i in reversed(range(7))]
+counts = [date_counts.get(date, 0) for date in dates]
+trend_df = pd.DataFrame({"Date": dates, "Appointments": counts})
+st.line_chart(trend_df.set_index("Date"))
+
+st.markdown("---")
+
+st.subheader(" Alerts")
+alerts = []
+if total_patients > 90:
+    alerts.append("⚠️ High occupancy rate! Consider opening additional rooms.")
+if appointments_today > 20:
+    alerts.append("📅 Too many appointments today. Expect delays.")
+
+if alerts:
+    for alert in alerts:
+        st.warning(alert)
+else:
+    st.success("No critical alerts at the moment.")
+
+st.markdown("---")
+
+st.subheader(" Patient Summary")
+patient_names = [decrypt_data(p["name"]) for p in patients]
+selected_patient = st.selectbox("Select a patient", patient_names)
+
+if selected_patient:
+    selected_data = next((p for p in patients if decrypt_data(p["name"]) == selected_patient), None)
+    if selected_data:
+        st.write("**Patient Info:**")
+        st.json({
+            "Name": decrypt_data(selected_data.get("name", "Unknown")),
+            "Age": decrypt_data(selected_data.get("age", "N/A")),
+            "Gender": decrypt_data(selected_data.get("gender", "N/A")),
+        })
+
+        st.write("**Appointments History:**")
+        history = [a for a in appointments if decrypt_data(a.get("name", "")) == selected_patient]
+        if history:
+            df_history = pd.DataFrame([
+                {"Date": decrypt_data(h["date"]), "Reason": decrypt_data(h["reason"])} for h in history
+            ])
+            st.dataframe(df_history)
+        else:
+            st.info("No past appointments found.")
+
+st.markdown("---")
+
+st.subheader(" Quick Actions")
 colA, colB = st.columns(2)
 with colA:
     if st.button(" Add New Patient"):
-        st.switch_page("pages/2_Add_Patient.py")
+        st.switch_page("2_Patient_Records")
 with colB:
     if st.button(" Give Appointment"):
-        st.switch_page("pages/3_Give_Appointment.py")
+        st.switch_page("3_Appointments")
