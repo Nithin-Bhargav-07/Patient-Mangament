@@ -4,3 +4,4 @@ matplotlib
 pandas
 PyPDF2
 Pillow
+numpy
