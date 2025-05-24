@@ -6,7 +6,7 @@ import base64
 
 if st.session_state.get("logged_out"):
     st.session_state.clear()
-    st.experimental_rerun()
+    st.rerun()
 
 st.set_page_config(page_title="Hospital Dashboard", layout="wide")
 
