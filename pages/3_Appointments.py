@@ -15,7 +15,6 @@ role_required(['doctor'])
 
 st.title("Schedule Appointment")
 
-# Load patients
 patients = []
 if os.path.exists("data/patients.json"):
     with open("data/patients.json", "r") as f:
