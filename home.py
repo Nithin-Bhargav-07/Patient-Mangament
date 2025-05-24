@@ -2,8 +2,27 @@ import streamlit as st
 import os
 from config import ROLES
 import streamlit_authenticator as stauth
+import base64
 
 st.set_page_config(page_title="Hospital Dashboard", layout="wide")
+
+def set_background(image_path):
+    with open(image_path, "rb") as img_file:
+        encoded_image = base64.b64encode(img_file.read()).decode()
+    css = f"""
+    <style>
+    .stApp {{
+        background-image: url("data:image/jpg;base64,{encoded_image}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }}
+    </style>
+    """
+    st.markdown(css, unsafe_allow_html=True)
+
+set_background("images/background.jpg")
 
 # Initialize session state
 if 'authenticated' not in st.session_state:
@@ -39,6 +58,8 @@ if st.session_state.authenticated:
         st.success("Logged out successfully!")
         st.experimental_rerun()
 
+
+
     # Add your main app content here (or use pages)
     st.title(" Welcome to the Hospital Management System")
-    st.write("Use the sidebar to navigate between pages.")
+   

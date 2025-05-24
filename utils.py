@@ -1,7 +1,7 @@
 import streamlit as st
 import base64
 
-def set_background_local(image_path):
+def set_background(image_path):
     """
     Sets a local image as the background for the Streamlit app.
     image_path: relative path to the image file
