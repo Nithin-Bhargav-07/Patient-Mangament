@@ -4,6 +4,10 @@ from config import ROLES
 import streamlit_authenticator as stauth
 import base64
 
+if st.session_state.get("logged_out"):
+    st.session_state.clear()
+    st.experimental_rerun()
+
 st.set_page_config(page_title="Hospital Dashboard", layout="wide")
 
 def set_background(image_path):
@@ -24,13 +28,13 @@ def set_background(image_path):
 
 set_background("images/background.jpg")
 
-# Initialize session state
+
 if 'authenticated' not in st.session_state:
     st.session_state.authenticated = False
 if 'role' not in st.session_state:
     st.session_state.role = None
 
-# Login form
+
 if not st.session_state.authenticated:
     with st.sidebar:
         st.header("Login")
@@ -40,26 +44,22 @@ if not st.session_state.authenticated:
         login_btn = st.button("Login")
 
         if login_btn:
-            # Simulate authentication success
             st.session_state.authenticated = True
             st.session_state.role = role
             st.session_state.username = username 
             st.success(f"Logged in as {role}")
-            st.experimental_rerun()
+            st.rerun()
 
-# Main app
 if st.session_state.authenticated:
     st.sidebar.write(f" Role: `{st.session_state.role}`")
 
-    #  Logout button
-    if st.sidebar.button("Logout "):
-        for key in list(st.session_state.keys()):
-            del st.session_state[key]
-        st.success("Logged out successfully!")
-        st.experimental_rerun()
+  
+    if st.sidebar.button("Logout"):
+        st.session_state["logged_out"] = True
+        st.rerun()
 
 
 
-    # Add your main app content here (or use pages)
+  
     st.title(" Welcome to the Hospital Management System")
    
