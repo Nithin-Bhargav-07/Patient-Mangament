@@ -5,6 +5,12 @@ import os
 import pandas as pd
 from datetime import datetime
 import matplotlib.pyplot as plt
+from utils import set_background
+
+st.set_page_config(page_title="Hospital Dashboard", layout="wide")
+
+set_background("images/background.jpg")  
+
 
 # Access control
 role_required(['admin', 'doctor'])

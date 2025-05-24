@@ -4,6 +4,12 @@ import json
 import os
 from datetime import datetime
 from encryption import encrypt_data, decrypt_data
+from utils import set_background
+
+st.set_page_config(page_title="Hospital Dashboard", layout="wide")
+
+set_background("images/background.jpg")  
+
 
 role_required(['doctor'])
 
